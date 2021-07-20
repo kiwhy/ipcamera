@@ -3,7 +3,7 @@ import numpy
 import cv2
 from flask import Flask, render_template, Response
 
-UDP_IP = "192.168.50.190"
+UDP_IP = "193.123.234.179"
 UDP_PORT = 5000
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

@@ -14,9 +14,9 @@ app = Flask(__name__)
 def mainpage():
     userid = session.get('userid', None)
     log_db = pymysql.connect(
-        user='root',
+        user='root2',
         password='test',
-        host='192.168.3.19',
+        host='193.123.234.179',
         database='eventlog',
         charset='utf8'
     )
@@ -26,7 +26,7 @@ def mainpage():
     cursor.execute(sql)
 
     data_list = cursor.fetchall()
-    # return render_template('index2.html', data_list=data_list)
+    return render_template('index2.html', data_list=data_list)
     return render_template('main.html', userid=userid, data_list=data_list)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     db.app = app
     db.create_all()
 
-    app.run(host="192.168.3.19", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

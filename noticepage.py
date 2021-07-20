@@ -7,9 +7,9 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     log_db = pymysql.connect(
-        user='root',
+        user='root2',
         password='test',
-        host='192.168.3.19',
+        host='193.123.234.179',
         database='eventlog',
         charset='utf8'
     )

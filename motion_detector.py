@@ -11,13 +11,13 @@ ap.add_argument("-v", "--video", help="path to the video file")
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args())
 
-# log_db = pymysql.connect(
-#     user='root',
-#     password='test',
-#     host='192.168.3.19',
-#     database='eventlog',
-#     charset='utf8'
-# )
+log_db = pymysql.connect(
+    user='root2',
+    password='test',
+    host='193.123.234.179',
+    database='eventlog',
+    charset='utf8'
+)
 
 if args.get("video", None) is None:
     vs = cv2.VideoCapture(args["video"])
@@ -79,11 +79,11 @@ while True:
 
     if logswitch == True:
         if logswitch2 == True:
-            # cursor = log_db.cursor(pymysql.cursors.DictCursor)
-            # sql = "insert into eventlogtbl (log) values (%s)"
-            # val = datetime.datetime.now().strftime("%y년%m월%d일%H시%M분%S초")
-            # cursor.execute(sql, val)
-            # log_db.commit()
+            cursor = log_db.cursor(pymysql.cursors.DictCursor)
+            sql = "insert into eventlogtbl (log) values (%s)"
+            val = datetime.datetime.now().strftime("%y년%m월%d일%H시%M분%S초")
+            cursor.execute(sql, val)
+            log_db.commit()
 
             now = datetime.datetime.now().strftime("%y년%m월%d일%H시%M분-%S초")
             out = cv2.VideoWriter(now + ".avi", cv2.VideoWriter_fourcc(*'DIVX'), 60, (640, 480))
