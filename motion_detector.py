@@ -5,6 +5,12 @@ import imutils
 import time
 import cv2
 import pymysql
+import socket
+
+UDP_IP = '192.168.50.190'
+UDP_PORT = 5000
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
@@ -14,13 +20,13 @@ args = vars(ap.parse_args())
 log_db = pymysql.connect(
     user='root2',
     password='test',
-    host='193.123.234.179',
+    host='192.168.50.190',
     database='eventlog',
     charset='utf8'
 )
 
 if args.get("video", None) is None:
-    vs = cv2.VideoCapture(args["video"])
+    vs = VideoStream(src=0).start()
     time.sleep(2.0)
 
 
@@ -64,11 +70,9 @@ while True:
     cv2.putText(frame, "Room Status: {}".format(text), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] -10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-    cv2.imshow("Security Feed", frame)
-    cv2.imshow("Thresh", thresh)
-    cv2.imshow("Frame Delta", frameDelta)
-
-
+    # cv2.imshow("Security Feed", frame)
+    # cv2.imshow("Thresh", thresh)
+    # cv2.imshow("Frame Delta", frameDelta)
 
     if text == "Unoccupied":
         logswitch2 = True
@@ -86,11 +90,18 @@ while True:
             log_db.commit()
 
             now = datetime.datetime.now().strftime("%y년%m월%d일%H시%M분-%S초")
-            out = cv2.VideoWriter(now + ".avi", cv2.VideoWriter_fourcc(*'DIVX'), 60, (640, 480))
+            out = cv2.VideoWriter(now + ".avi", cv2.VideoWriter_fourcc(*'DIVX'), 20, (640, 480))
 
             logswitch2 = False
 
         out.write(frame_saved)
+
+    streaming = cv2.imencode('.jpg', frame)[1].tobytes()
+    for i in range(20):
+        sock.sendto(bytes([i]) + streaming[i * 46080:(i + 1) * 46080], (UDP_IP, UDP_PORT))
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
     key = cv2.waitKey(1) & 0xFF
 
