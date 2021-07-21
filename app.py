@@ -34,8 +34,8 @@ def mainpage():
     cursor.execute(sql)
 
     data_list = cursor.fetchall()
-    return render_template('index2.html', data_list=data_list)
     return render_template('main.html', userid=userid, data_list=data_list)
+    return render_template('index2.html', data_list=data_list)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
