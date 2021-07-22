@@ -69,7 +69,8 @@ def logout():
 
 @app.route('/streaming', methods=['GET'])
 def index():
-    return render_template('streaming.html')
+    userid = session.get('userid', None)
+    return render_template('streaming.html', userid=userid)
 
 def streaming():
     while True:
