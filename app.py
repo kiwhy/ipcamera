@@ -8,7 +8,7 @@ from Forms import UserCreateForm, LoginForm
 import pymysql
 import socket
 
-UDP_IP = "192.168.50.190"
+UDP_IP = "193.123.234.179"
 UDP_PORT = 5000
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -24,7 +24,7 @@ def mainpage():
     log_db = pymysql.connect(
         user='root2',
         password='test',
-        host='192.168.50.190',
+        host='193.123.234.179',
         database='eventlog',
         charset='utf8'
     )
